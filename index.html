@@ -1,0 +1,577 @@
+<html>
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css?family=Press+Start+2P"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body,
+      pre,
+      code,
+      kbd,
+      samp {
+        font-family: "font-family you want to use";
+      }
+    </style>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/go.min.js"></script>
+
+    <link
+      href="https://unpkg.com/nes.css@latest/css/nes.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div
+      x-data="{stage: Alpine.$persist('basic'), lastStage: Alpine.$persist(''), hearts: ['🤍', '🤍', '🤍', '🤍'], emptyHearts:[], jumpReact: false}"
+      x-init="$watch('hearts', (value) => {
+          if(value.length === 0) {
+            lastStage = stage
+            stage = 'you-loose'
+          }
+        })"
+      class="relative"
+    >
+      <section x-show="stage !== 'you-loose'">
+        <section
+          @click="() => {
+          emptyHearts.push('💔')
+          hearts.pop()
+        }"
+          class="icon-list absolute top-3 left-5 z-30 animate-pulse"
+        >
+          <template x-for="h in hearts">
+            <i class="nes-icon is-medium heart"></i>
+          </template>
+          <template x-for="h in emptyHearts">
+            <i class="nes-icon is-medium heart is-transparent"></i>
+          </template>
+        </section>
+      </section>
+
+      <button
+        @click="() => {
+          stage = 'basic'
+          hearts = ['🤍', '🤍', '🤍', '🤍']
+          emptyHearts = []
+        }"
+        class="absolute top-5 right-5 bg-gray-300 flex w-10 h-10 items-center align-center hover:bg-gray-400 z-30"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 m-auto"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+
+      <template x-data="{coins: 0 }" x-if="stage === 'you-loose'">
+        <div>
+        <div class="nes-container with-title is-centered">
+          <p class="title">PERSIST AND WATCH</p>
+          <p class="text-3xl text-center">CONTINUE</p>
+          <div class="m-5">
+            <i class="nes-icon coin is-medium"></i> <span x-text="coins"></span
+            ><span> / 3 needed</span>
+          </div>
+          <div class="animate-bounce">
+            <button
+              @click="() => {
+                if(coins < 3){
+                  coins += 1
+                } else {
+                  coinst = 0
+                  hearts = ['🤍','🤍','🤍','🤍']
+                  emptyHearts = []
+                  stage = jumpReact ? 'alpine-intro' : lastStage
+                }
+              }"
+              type="button"
+              class="nes-btn is-warning"
+              x-text="() => coins < 3 ? 'Insert Coin' : 'Continue'"
+            ></button>
+          </div>
+          
+        </div>
+        <pre class="bg-gray-700">
+          <code class="language-js text-white">
+            &lt;div
+            <span class="text-yellow-300">x-data="{stage: Alpine.$persist('basic'), lastStage: Alpine.$persist(''), hearts: ['🤍', '🤍', '🤍', '🤍'], emptyHearts:[], jumpReact: false}"
+            x-init="$watch('hearts', (value) =&gt; {
+                if(value.length === 0) {
+                  lastStage = stage
+                  stage = 'you-loose'
+                }
+              })"
+            </span>
+            class="relative"
+            &gt;
+            
+            &lt;template x-data="{coins: 0 }" x-if="stage === 'you-loose'"&gt;
+              &lt;div class="nes-container with-title is-centered"&gt;
+                &lt;p class="title"&gt;PERSIST AND WATCH&lt;/p&gt;
+                &lt;p class="text-3xl text-center"&gt;CONTINUE&lt;/p&gt;
+                &lt;div class="m-5"&gt;
+                  &lt;i class="nes-icon coin is-medium"&gt;&lt;/i&gt; &lt;span x-text="coins"&gt;&lt;/span
+                  &gt;&lt;span&gt; / 3 needed&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;div class="animate-bounce"&gt;
+                  &lt;button
+                  <span class="text-yellow-300">
+                    @click="() =&gt; {
+                      if(coins &lt; 3){
+                        coins += 1
+                      } else {
+                        hearts = ['🤍','🤍','🤍','🤍']
+                        stage = jumpReact ? 'alpine-intro' : lastStage
+                      }
+                    }"
+                  </span>
+                    type="button"
+                    class="nes-btn is-warning"
+                    <span class="text-yellow-300">
+                    x-text="() =&gt; coins &lt; 3 ? 'Insert Coin' : 'Continue'"
+                  </span>
+                  &gt;&lt;/button&gt;
+                &lt;/div&gt;
+                
+              &lt;/div&gt;
+            &lt;/template&gt;
+            
+            
+            &lt;/div&gt;
+        </pre>
+      </div>
+      </template>
+      <!-- basic state -->
+      <template x-if="stage === 'basic'">
+        <div>
+          <div class="nes-container with-title is-centered">
+            <h1 class="text-3xl p-5">Alpine.js adventure</h1>
+            <img
+              class="w-1/2 m-auto p-5"
+              src="https://i.redd.it/r36s9exzs4u21.png"
+            />
+            <button
+              type="button"
+              class="nes-btn is-warning animate-bounce"
+              @click="() => stage = 'binding';"
+            >
+              Press to Start
+            </button>
+          </div>
+
+          <pre class="bg-gray-700">
+          <code class="language-js text-white">
+            <span class="text-yellow-300"> &lt;div x-data="{stage: 'basic'}"&gt;</span>
+            &lt;!-- basic state --&gt;
+            &lt;template <span class="text-yellow-300">x-if="stage === 'basic'"</span>&gt;
+              &lt;div class="nes-container with-title is-centered"&gt;
+                &lt;div&gt;
+                  &lt;h1 class="text-3xl p-5"&gt;Alpine.js&lt;/h1&gt;
+                  &lt;img
+                    class="w-1/2 m-auto p-5"
+                    src="https://i.redd.it/r36s9exzs4u21.png"
+                  /&gt;
+                  <span class="text-yellow-300">
+                  &lt;button
+                    type="button"
+                    class="nes-btn is-warning animate-bounce"
+                    @click="() =&gt; stage = 'binding'"
+                  &gt;
+                    Press to Start
+                  &lt;/button&gt;
+                </span>
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/template&gt;
+            ...
+          <span class="text-yellow-300">&lt;/div&gt;</span>
+          </code>
+        </pre>
+        </div>
+      </template>
+
+      <!-- STATE BINDING  -->
+
+      <template x-if="stage === 'binding'">
+        <div x-data="{progress: 0}">
+          <div class="nes-container with-title is-centered">
+            <p class="title">State Binding</p>
+            <h1
+              class="text-3xl text-center p-5 animate-pulse"
+              x-text="progress == 0 ? 'UHMM ... THIS SHOULD BE LOADING' : 'LOADING...'"
+            ></h1>
+            <div>
+              <progress
+                class="nes-progress"
+                x-bind:value="progress"
+                x-init="
+                window.setInterval(
+                  function () {
+                    if(progress < 100) {
+                      progress += 10;
+                    }
+                }, 1000);
+                "
+                max="100"
+              ></progress>
+              <div x-show="progress >= 100" class="tex-center p-10">
+                <button
+                  @click="stage = 'jquery-presentation'"
+                  class="nes-btn animate-bounce"
+                  type="button"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          </div>
+          <pre x-show="progress >= 100" class="bg-gray-700">
+            <code class="language-js text-white">
+            &lt;div class="nes-container with-title is-centered"&gt;
+            &lt;p class="title"&gt;State Binding&lt;/p&gt;
+            &lt;div <span class="text-yellow-300 ">
+              x-data="{progress: 0}"
+              x-init="() =&gt; {
+                window.setInterval(
+                  function () {
+                    if(progress < 100) {
+                      progress += 10;
+                    }
+                }, 1000);
+              }"
+            </span>
+            &gt;
+              &lt;progress
+                class="nes-progress"
+                <span class="text-yellow-300">x-bind:value="progress"</span>
+                max="100"
+              &gt;&lt;/progress&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          </code></pre>
+        </div>
+      </template>
+      <!-- STATE BINDING  -->
+
+      <!-- ALPINE PRESENTATION -->
+      <template
+        x-if="stage === 'jquery-presentation'"
+        x-data="{
+        jqueryLines: [
+          '...',
+          'you traitor...',
+          'I see you are with Alpine Chan now..',
+          'There was a time where listening to events and taking action was MY thing. Now every John-Doe thinks they can mimic my power using VIRTUAL DOMS and other gimmicks...',
+          'I will no longer tolarate the disrespect!'
+        ],
+        lineIndex: 0,
+      }"
+      >
+        <div class="w-full">
+          <div
+            @keyup.prevent.document.enter="(e) => {
+              lineIndex += 1
+            }"
+            class="w-1/2 relative"
+          >
+            <img src="/images/jquery-kun.jpg" class="w-full relative" />
+
+            <div class="nes-container is-dark with-title">
+              <p class="title">JQuery Dono</p>
+              <p x-text="jqueryLines[lineIndex]"></p>
+            </div>
+
+            <div x-show="lineIndex > 4" class="tex-center p-10">
+              <button
+                @click="stage = 'react-presentation'"
+                class="nes-btn animate-bounce"
+                type="button"
+              >
+                mmmkay...
+              </button>
+            </div>
+          </div>
+          <pre class="bg-gray-700">
+            <code class="language-js text-white">
+            &lt;template<span class="text-yellow-300">
+              x-if="stage === 'alpine-presentation'"
+              x-data="{
+              jqueryLines: [
+                '...',
+                'you traitor...',
+                'I see you are with Alpine-chan now..',
+                'There was a time where listening to events and taking action was MY thing. Now every John-Doe thinks they can mimic my power using VIRTUAL DOMS and other gimmicks...',
+                'I will no longer tolarate the disrespect!'
+              ],
+              lineIndex: 0,
+            }"
+          </span>
+            &gt;
+              &lt;div class="w-full"&gt;
+                &lt;div
+                <span class="text-yellow-300">@keyup.prevent.document.enter="(e) =&gt; {
+                    lineIndex += 1
+                  }"</span>
+                  class="w-1/2 relative"
+                &gt;
+                  &lt;img src="/images/jquery-kun.jpg" class="w-full relative" /&gt;
+                  &lt;img
+                    x-show="enterHint"
+                    src="/images/enter.png"
+                    class="absolute w-24 bottom-20 right-0 animate-bounce"
+                  /&gt;
+                  &lt;div class="nes-container is-dark with-title"&gt;
+                    &lt;p class="title"&gt;JQuery kun&lt;/p&gt;
+                    <span class="text-yellow-300"> &lt;p x-text="jqueryLines[lineIndex]"&gt;&lt;/p&gt;</span>
+                  &lt;/div&gt;
+      
+                  <span class="text-yellow-300">
+                  &lt;div x-show="lineIndex &gt; 4" class="tex-center p-10"&gt;
+                    &lt;button
+                      @click="stage = 'stage-management'"
+                      class="nes-btn animate-bounce"
+                      type="button"
+                    &gt;
+                      mmmkay...
+                    &lt;/button&gt;
+                  &lt;/div&gt;
+                </span>
+                &lt;/div&gt;
+      &lt;/template&gt;
+            </code>
+          </pre>
+        </div>
+      </template>
+
+      <!-- ALPINE PRESENTATION -->
+
+      <!-- REACT RANT -->
+
+      <template
+        x-if="stage === 'react-presentation'"
+        x-data="{
+      reactLines:  [
+        '...',
+        '(weird breathing noises)',
+        'what happened??!',
+        'I tought we where going to start that new project toggether!',
+        '...',
+        '(more weird breathing noises)', 
+        'We could have conquered that landing without a sweat',
+        'Now since Alpine Chan arrived in town we dont hang out as regular as before',
+        'But I know... Im POWERFUL without measure, it doesnt matter the project I can handle it',
+        'Now Im taking all your precious hearts with me, If you are not with me, then you will not be with anyone!!!',
+        'NOBODY!!!'
+        ],
+      reactLineIndex: 0,
+    }"
+      >
+        <div class="w-full">
+          <div
+            @keyup.prevent.document.enter="(e) => {
+              if(reactLineIndex < 10){
+                reactLineIndex += 1
+              } else {
+                jumpReact = true
+                hearts = []
+                emptyHearts = ['💔','💔','💔','💔']
+              }
+          }"
+            class="w-1/2 relative"
+          >
+            <img src="/images/react-kun.jpg" class="w-full relative" />
+
+            <div class="nes-container is-dark with-title">
+              <p class="title">React kun</p>
+              <p x-text="reactLines[reactLineIndex]"></p>
+            </div>
+          </div>
+          <pre x-show="reactLineIndex > 4" class="bg-gray-700">
+          <code class="language-js text-white">
+          &lt;template<span class="text-yellow-300">
+            x-if="stage === 'alpine-presentation'"
+            x-data="{
+            reactLines: [
+              '...',
+              '[weird breathing noises]',
+              'what happened??!',
+              'I tought we where woing to start that new project toggether!',
+              '...',
+              '[more weird breathing noises]', 
+              'We could have conquered that landing without a sweat',
+              'Now since Alpine Chan arrived in town we dont hang out as regular as before',
+              'But I know... Im POWERFUL without measure, it doesnt matter the project I can handle it',
+              'Now Im taking all your precious hearts with me, If you are not with me, then you will not be with anyone!!!',
+              'NOBODY!!!'
+            ],
+            lineIndex: 0,
+          }"
+        </span>
+          &gt;
+            &lt;div class="w-full"&gt;
+              &lt;div
+              <span class="text-yellow-300">@keyup.prevent.document.enter="(e) =&gt; {
+                if(reactLineIndex < 10){
+                  reactLineIndex += 1
+                } else {
+                  hearts = []
+                  emptyHearts = ['💔','💔','💔','💔']
+                }
+                }"</span>
+                class="w-1/2 relative"
+              &gt;
+                &lt;img src="/images/reac-kun.jpg" class="w-full relative" /&gt;
+                &lt;img
+                  x-show="enterHint"
+                  src="/images/enter.png"
+                  class="absolute w-24 bottom-20 right-0 animate-bounce"
+                /&gt;
+                &lt;div class="nes-container is-dark with-title"&gt;
+                  &lt;p class="title"&gt;React kun&lt;/p&gt;
+                  <span class="text-yellow-300"> &lt;p x-text="jqueryLines[lineIndex]"&gt;&lt;/p&gt;</span>
+                &lt;/div&gt;
+    
+              
+              &lt;/div&gt;
+    &lt;/template&gt;
+          </code>
+        </pre>
+        </div>
+      </template>
+      <!-- REACT RANT -->
+
+      <!-- STATE MANAGEMENT -->
+      <template
+        x-data="{
+        alpineLines:  [
+          '...Those guys, really',
+          'Dont know what kind of ideas they have made of me. But I know you understand me better',
+          'In fact...',
+          'Lets see how well you know me now...',
+          'FIRST QUESTION:',
+          'Do I use a virtual dom?',
+          'SECOND QUESTION:',
+          'Why de we use <template> tags to render things?',
+          'THIRD QUESTION:',
+          'Name one of my directives and what it does ',
+          'GREAT! Looks like you are ready to be an alipine expert... how awesome is that?!',
+          '...',
+          'Well...  thats it',
+          'What else do you want, a prize or something? This is just a weird way to teach Alpine.JS so your nerd brain remembers it for longer',
+          '... ok whatevs, write your name here:'
+        ],
+      alpineLineIndex: 0,
+      }"
+        x-if="stage === 'alpine-intro'"
+      >
+        <div class="w-full">
+          <div
+            @keyup.prevent.document.enter="(e) => {
+              alpineLineIndex += 1
+            }"
+            class="w-1/2 relative"
+          >
+            <img src="/images/alpine-chan.jpg" class="w-full relative" />
+
+            <div class="nes-container is-dark with-title">
+              <p class="title">Alpine chan</p>
+              <p x-text="alpineLines[alpineLineIndex]"></p>
+                <div x-show="alpineLineIndex > 13" x-data="{
+                  name: ''  
+                }">
+                <div>
+                    <input @keyup.prevent.enter="() => {
+                      console.log(name)
+                      const testName = name.toLowerCase()
+                      let theUrl = ''
+                      if(testName.includes('gab')){
+                        theUrl = 'https://linear.app/bekind/view/a01d898a-9460-46d6-9b62-d1fe1e7d3006'
+                      } else if(testName.includes('klau')){
+                        theUrl = 'https://www.notion.so/tafka/0e8b9be68c2746c38f6bd7a251dcc14d?v=01597192974f498da6346499851f9647'
+                      } else if(testName.includes('essa')){
+                        theUrl = 'https://linear.app/bekind/view/55ad2dc8-633d-4fe1-a809-5a4cfe3260f9'
+                      } else if(testName.includes('jair')){
+                        theUrl = 'https://linear.app/bekind/view/17e06f25-02c4-4393-a648-e82a96e2c269'
+                      } else if(testName.includes('naz')){
+                        theUrl = 'https://coda.io/d/_dLOXWK9Rhpw/Sorpresa-Naz_suRVn'
+                      } else if(testName.includes('kare') || testName.includes('kim')){
+                        theUrl = 'https://linear.app/agtonomy/issue/SSV-868/support-the-getmotorcontrollerstatestream-in-cloud-gateway'
+                      } else if(testName.includes('carl')){
+                        theUrl = 'https://linear.app/bekind/view/ba30b33f-f494-47f9-beb9-7aa3665780eb'
+                      } 
+                      else if(testName.includes('luis') || testName.includes('luig')){
+                        theUrl = 'https://linear.app/agtonomy/issue/SSV-825/logic-to-drag-individual-waypoints'
+                      } else if(testName.includes('hans')){
+                        theUrl = 'https://www.youtube.com/shorts/3D8mpDkr1KA'
+                      } else {
+                        theUrl = 'https://www.youtube.com/watch?v=9NcPvmk4vfo'
+                      }
+                      window.open(theUrl)
+                    }" type="text" x-model="name" id="dark_field" class="nes-input is-dark" placeholder="your great name here">
+                    <button @click="() => {
+                      console.log(name)
+                      const testName = name.toLowerCase()
+                      let theUrl = ''
+                      if(testName.includes('gab')){
+                        theUrl = 'https://linear.app/bekind/view/a01d898a-9460-46d6-9b62-d1fe1e7d3006'
+                      } else if(testName.includes('klau')){
+                        theUrl = 'https://www.notion.so/tafka/0e8b9be68c2746c38f6bd7a251dcc14d?v=01597192974f498da6346499851f9647'
+                      } else if(testName.includes('essa')){
+                        theUrl = 'https://linear.app/bekind/view/55ad2dc8-633d-4fe1-a809-5a4cfe3260f9'
+                      } else if(testName.includes('jair')){
+                        theUrl = 'https://linear.app/bekind/view/17e06f25-02c4-4393-a648-e82a96e2c269'
+                      } else if(testName.includes('naz')){
+                        theUrl = 'https://coda.io/d/_dLOXWK9Rhpw/Sorpresa-Naz_suRVn'
+                      } else if(testName.includes('kare') || testName.includes('kim')){
+                        theUrl = 'https://linear.app/agtonomy/issue/SSV-868/support-the-getmotorcontrollerstatestream-in-cloud-gateway'
+                      } else if(testName.includes('carl')){
+                        theUrl = 'https://linear.app/bekind/view/ba30b33f-f494-47f9-beb9-7aa3665780eb'
+                      } 
+                      else if(testName.includes('luis') || testName.includes('luig')){
+                        theUrl = 'https://linear.app/agtonomy/issue/SSV-825/logic-to-drag-individual-waypoints'
+                      } else if(testName.includes('hans')){
+                        theUrl = 'https://www.youtube.com/shorts/3D8mpDkr1KA'
+                      } else {
+                        theUrl = 'https://www.youtube.com/watch?v=9NcPvmk4vfo'
+                      }
+                      window.open(theUrl)
+                    }" class="nes-btn">Lets get over it</button>
+                  </div>
+                </div>
+            </div>
+
+            <!-- <div x-show="alpineLineIndex > 4" class="tex-center p-10">
+              <button
+                @click="stage = 'react-presentation'"
+                class="nes-btn animate-bounce"
+                type="button"
+              >
+                mmmkay...
+              </button>
+            </div> -->
+          </div>
+        </div>
+      </template>
+    </div>
+  </body>
+</html>
